@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb_checkpoints/
+
+# Environments
+.env
+venv/
+.env.*
+
+# Data
+data/raw/
+data/processed/photos.zip
+*.xlsx
+*.csv
+
+# Sessions
+*.session
+scraping_session.*
+
+# VSCode
+.vscode/
