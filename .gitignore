@@ -22,3 +22,6 @@ scraping_session.*
 
 # VSCode
 .vscode/
+
+# mac OS
+.DS_Store
