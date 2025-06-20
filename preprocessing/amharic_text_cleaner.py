@@ -1,6 +1,15 @@
 import re
 
 def clean_amharic_text(text):
+    """
+    Clean Amharic text by removing links, hashtags, mentions, emojis, and unwanted punctuation.
+    Args:
+        text (str): The input Amharic text.
+    Returns:
+        str: Cleaned Amharic text.
+    """
+    if text is None:
+        return ""
     text = text.strip()
 
     # Remove links, hashtags, mentions

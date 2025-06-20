@@ -1,6 +1,6 @@
 # EthioMart Amharic E-commerce NER System
 
-A machine learning pipeline to extract structured information (product names, prices, and locations) from Amharic-language e-commerce messages collected from Telegram. This project supports EthioMart’s mission to centralize fragmented online commerce in Ethiopia.
+A machine learning pipeline to extract structured information (product names, prices, and locations) from Amharic-language e-commerce messages collected from Telegram. This project supports EthioMart's mission to centralize fragmented online commerce in Ethiopia.
 
 ---
 
@@ -86,5 +86,77 @@ ethiomart-amharic-ner/
 
 - `data/raw/telegram_data.xlsx` – Raw messages collected from Telegram
 - `data/processed/cleaned_telegram_data.csv` – Preprocessed messages ready for labeling
+
+---
+
+## Project Structure
+
+```text
+Amharic-E-commerce-Data-Extractor/
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── samples/
+├── ingestion/
+│   ├── telegram_scraper.py
+│   ├── config.yaml
+│   └── channels_to_crawl.xlsx
+├── preprocessing/
+│   ├── amharic_text_cleaner.py
+│   └── preprocess_pipeline.py
+├── notebooks/
+│   ├── exploration.ipynb
+│   ├── train_ner_model.ipynb
+│   └── ...
+├── utils/
+│   ├── io_helpers.py
+│   └── logger.py
+├── tests/
+│   └── test_preprocessing.py
+├── config/
+│   └── config.yaml
+├── scripts/
+│   ├── run_pipeline.py
+│   └── train_model.py
+├── .gitignore
+├── .env.example
+├── requirements.txt
+├── README.md
+└── setup.py / pyproject.toml
+```
+
+## Usage
+
+```bash
+# Run the full pipeline (scraping + preprocessing)
+python scripts/run_pipeline.py
+
+# Train the NER model (currently a placeholder, use the notebook for full training)
+python scripts/train_model.py
+
+# Run tests
+pytest tests/
+```
+
+## Configuration
+
+All pipeline and training parameters are managed in `config/config.yaml`. Update this file to change input/output paths, scraping limits, and other settings.
+
+## Tests
+
+The `tests/` directory contains unit tests for core functionality, such as preprocessing and text cleaning. To add new tests, create additional files in this directory following the `test_*.py` naming convention and use `pytest` for test discovery and execution.
+
+Run all tests with:
+
+```bash
+pytest tests/
+```
+
+## Contributing
+
+1. Fork the repository and create your branch from `main`.
+2. Add tests for any new features or bug fixes.
+3. Ensure code style with `black` and `flake8`.
+4. Submit a pull request with a clear description of your changes.
 
 ---

@@ -1,27 +1,31 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.ipynb_checkpoints/
+*.py[cod]
+*.so
 
-# Environments
+# Environment
 .env
 venv/
-.env.*
+scraping_session.session
 
-# Data
-data/raw/
-data/processed/photos.zip
-*.xlsx
-*.csv
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
 
-# Sessions
-*.session
-scraping_session.*
+# Datasets and media
+data/raw/photos/
+data/raw/*.zip
+data/processed/*.csv
+data/processed/*.txt
+!data/processed/*.conll
 
-# VSCode
-.vscode/
+# Model files
+notebooks/amharic-ner-model/
+notebooks/ner_results/
+models/
 
-# mac OS
-.DS_Store
+# Reports
+reports/*.pdf
+
+# Logs (optional)
+logs/
+*.log

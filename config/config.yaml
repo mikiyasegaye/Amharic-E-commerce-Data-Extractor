@@ -1,0 +1,7 @@
+# Central config for the Amharic E-commerce Data Extractor pipeline
+# Usage: scripts/run_pipeline.py will read this file
+channels_file: ingestion/channels_to_crawl.xlsx
+output_file: data/raw/telegram_data.csv
+media_dir: data/raw/photos
+limit: 1000
+num_channels: 5
