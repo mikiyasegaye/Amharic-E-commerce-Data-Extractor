@@ -29,3 +29,6 @@ reports/*.pdf
 # Logs (optional)
 logs/
 *.log
+
+# Mac OS
+.DS_Store
