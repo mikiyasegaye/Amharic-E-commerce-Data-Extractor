@@ -1,162 +1,215 @@
+---
 # EthioMart Amharic E-commerce NER System
 
-A machine learning pipeline to extract structured information (product names, prices, and locations) from Amharic-language e-commerce messages collected from Telegram. This project supports EthioMart's mission to centralize fragmented online commerce in Ethiopia.
+A complete machine learning pipeline to extract structured information—like product names, prices, and locations—from Amharic e-commerce Telegram messages. This helps EthioMart assess vendors, track pricing, and identify business opportunities from unstructured chat data.
+---
+
+## 🚀 Project Goal
+
+To build a full pipeline that:
+
+- Collects Telegram posts from e-commerce channels
+- Preprocesses Amharic text
+- Labels key entities manually
+- Trains and compares NER models
+- Explains predictions (Model Interpretability)
+- Scores vendors for micro-lending (FinTech use case)
 
 ---
 
-## Task 1: Data Ingestion and Preprocessing
-
-### Task Overview
-
-This task involves building a pipeline for ingesting and preprocessing Amharic-language messages collected from Ethiopian e-commerce Telegram channels. The goal is to prepare clean, structured data for Named Entity Recognition (NER) model training.
-
-### Business Context
-
-EthioMart aims to centralize fragmented Telegram-based e-commerce activities in Ethiopia. To achieve this, messages from various Telegram vendors are aggregated, and key entities (e.g., product names, prices, and locations) are extracted using machine learning.
-
----
-
-## Task Objectives
-
-1. Identify and connect to relevant Telegram channels using a custom scraping script.
-2. Ingest message data (text and media) from these channels in real time.
-3. Preprocess Amharic messages by cleaning, normalizing, and tokenizing the text.
-4. Separate metadata (e.g., sender, timestamp) from message content.
-5. Save the cleaned, structured data in a format ready for annotation and modeling.
-
----
-
-## Tools and Technologies Used
+## 🔧 Tools and Technologies
 
 - Python 3.11+
-- Telethon for Telegram message scraping
-- pandas for data manipulation
-- python-dotenv for secure environment variable management
-- Regular expressions for Amharic text cleaning
-- Jupyter Notebook for interactive data exploration
+- [Telethon](https://github.com/LonamiWebs/Telethon) for Telegram scraping
+- Transformers (HuggingFace)
+- pandas, numpy
+- Jupyter Notebooks
+- SHAP, LIME for interpretability
+- scikit-learn for scoring
+- tqdm, evaluate, datasets
+- PyTorch with MPS for Apple Silicon
 
 ---
 
-## Directory Structure
+## 🗂️ Directory Structure
 
-```
-
-ethiomart-amharic-ner/
+```bash
+.
+├── config/                          # YAML config files
 ├── data/
-│   ├── raw/                        # Raw Telegram messages and media
-│   ├── processed/                  # Cleaned message data for modeling
-│   └── samples/                    # Small data subsets for testing
-│
-├── ingestion/
-│   ├── telegram\_scraper.py         # Telegram scraping script using Telethon
-│   ├── config.yaml                 # Channel list and metadata
-│   └── channels\_to\_crawl.xlsx     # Telegram channel links
-│
-├── preprocessing/
-│   ├── amharic\_text\_cleaner.py     # Cleaning/tokenizing logic
-│   └── preprocess\_pipeline.py      # Pipeline to clean and save messages
-│
-├── notebooks/
-│   └── exploration.ipynb           # Interactive cleaning preview
-│
-├── utils/
-│   ├── io\_helpers.py               # File I/O functions
-│   └── logger.py                   # Custom logging (optional)
-│
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
-
-```
-
----
-
-## What Was Done
-
-1. Created a structured project repository with clearly separated folders for ingestion, preprocessing, and utilities.
-2. Implemented a Telegram scraping script that collects messages and media into a local CSV and image archive.
-3. Wrote a cleaning function tailored to Amharic, removing emojis, URLs, mentions, and unwanted punctuation.
-4. Created a preprocessing pipeline that processes raw messages and stores the result in `cleaned_telegram_data.csv`.
-5. Verified and visualized message cleaning logic using an interactive Jupyter notebook.
-
----
-
-## Output
-
-- `data/raw/telegram_data.xlsx` – Raw messages collected from Telegram
-- `data/processed/cleaned_telegram_data.csv` – Preprocessed messages ready for labeling
-
----
-
-## Project Structure
-
-```text
-Amharic-E-commerce-Data-Extractor/
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── samples/
-├── ingestion/
-│   ├── telegram_scraper.py
-│   ├── config.yaml
-│   └── channels_to_crawl.xlsx
+│   ├── raw/                         # Raw Telegram messages
+│   └── processed/                   # Cleaned and labeled data (CoNLL format)
+├── notebooks/                      # All development notebooks
+│   ├── fine_tune_ner_model.ipynb   # Training NER model
+│   ├── compare_models.ipynb        # Model benchmarking
+│   ├── interpret_ner_model.ipynb   # SHAP & LIME explanation
+│   ├── vendor_scorecard.ipynb      # Vendor analytics
+│   └── exploration.ipynb           # Text cleaning demo
 ├── preprocessing/
 │   ├── amharic_text_cleaner.py
 │   └── preprocess_pipeline.py
-├── notebooks/
-│   ├── exploration.ipynb
-│   ├── train_ner_model.ipynb
-│   └── ...
-├── utils/
-│   ├── io_helpers.py
-│   └── logger.py
-├── tests/
-│   └── test_preprocessing.py
-├── config/
-│   └── config.yaml
-├── scripts/
-│   ├── run_pipeline.py
-│   └── train_model.py
-├── .gitignore
-├── .env.example
+├── src/
+│   ├── data_ingestion/             # Scraper logic
+│   ├── labeling/                   # CoNLL formatting
+│   ├── modeling/                   # Training, evaluation helpers
+│   └── vendor_analysis/           # Lending score logic
+├── utils/                          # Reusable I/O, logging helpers
+├── tests/                          # Unit tests
 ├── requirements.txt
-├── README.md
-└── setup.py / pyproject.toml
+└── README.md
 ```
 
-## Usage
+---
+
+## ✅ How to Run the Project
+
+### 1. Install dependencies
 
 ```bash
-# Run the full pipeline (scraping + preprocessing)
-python scripts/run_pipeline.py
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-# Train the NER model (currently a placeholder, use the notebook for full training)
-python scripts/train_model.py
+> If using Apple M1/M2/M3: use `torch` with `mps` backend. It’s already handled in the code.
 
-# Run tests
+---
+
+### 2. Scrape Telegram Posts
+
+Configure target channels in `src/data_ingestion/channels_to_crawl.xlsx` and then:
+
+```bash
+python src/data_ingestion/telegram_scraper.py
+```
+
+This will save messages to `data/raw/telegram_data.csv`.
+
+---
+
+### 3. Preprocess the Text
+
+```bash
+python preprocessing/preprocess_pipeline.py
+```
+
+This will clean Amharic text and store it at `data/processed/telegram_data_cleaned.csv`.
+
+---
+
+### 4. Annotate for NER (Manually)
+
+- Pick samples from `telegram_data_cleaned.csv`
+- Annotate in CoNLL format with entity labels: `B-Product`, `I-Product`, `B-PRICE`, `B-LOC`, etc.
+- Save as `data/processed/labeled_telegram_product_price_location.txt`
+
+---
+
+### 5. Fine-tune NER Model
+
+Run:
+
+```bash
+jupyter notebook notebooks/train_ner_model.ipynb
+```
+
+It fine-tunes `xlm-roberta-base` or other multilingual models on your labeled data.
+
+---
+
+### 6. Compare Models
+
+Run:
+
+```bash
+jupyter notebook notebooks/compare_models.ipynb
+```
+
+This compares `xlm-roberta-base`, `bert-base-amharic`, and `afroxlmr-base` on your data using precision, recall, and F1.
+
+---
+
+### 7. Interpret Predictions
+
+Run:
+
+```bash
+jupyter notebook notebooks/interpret_ner_model.ipynb
+```
+
+This explains predictions using:
+
+- SHAP for global interpretability
+- LIME for local explanations
+
+It helps understand how entity decisions are made and where the model fails.
+
+---
+
+### 8. Vendor Scorecard (Micro-Lending)
+
+Run:
+
+```bash
+jupyter notebook notebooks/vendor_scorecard.ipynb
+```
+
+This analyzes Telegram metadata + NER output to:
+
+- Measure post frequency
+- Calculate average views and price
+- Identify top-performing posts
+- Assign a Lending Score per vendor
+
+Final output is a table that can guide FinTech loan decisions.
+
+---
+
+## 📁 Key Files
+
+| File                                          | Purpose                                    |
+| --------------------------------------------- | ------------------------------------------ |
+| `telegram_scraper.py`                         | Scrapes vendor posts                       |
+| `preprocess_pipeline.py`                      | Cleans Amharic messages                    |
+| `labeled_telegram_product_price_location.txt` | Manual annotations in CoNLL format         |
+| `train_ner_model.ipynb`                       | Trains a transformer model                 |
+| `compare_models.ipynb`                        | Benchmarks multiple NER models             |
+| `interpret_ner_model.ipynb`                   | Explains NER predictions using SHAP + LIME |
+| `vendor_scorecard.ipynb`                      | Scores vendors for loan eligibility        |
+
+---
+
+## 🧪 Testing
+
+```bash
 pytest tests/
 ```
 
-## Configuration
-
-All pipeline and training parameters are managed in `config/config.yaml`. Update this file to change input/output paths, scraping limits, and other settings.
-
-## Tests
-
-The `tests/` directory contains unit tests for core functionality, such as preprocessing and text cleaning. To add new tests, create additional files in this directory following the `test_*.py` naming convention and use `pytest` for test discovery and execution.
-
-Run all tests with:
+Example:
 
 ```bash
-pytest tests/
+pytest tests/test_preprocessing.py
 ```
 
-## Contributing
+---
 
-1. Fork the repository and create your branch from `main`.
-2. Add tests for any new features or bug fixes.
-3. Ensure code style with `black` and `flake8`.
-4. Submit a pull request with a clear description of your changes.
+## 🧠 Notes
+
+- Designed for multilingual and low-resource settings (like Amharic)
+- Uses modern transformers (XLM-R, AfroXLMR)
+- Compatible with HuggingFace 🤗 ecosystem
+- Supports vendor profiling for FinTech innovation
+
+---
+
+## 💡 Final Output
+
+A production-ready system that:
+
+- Scrapes raw Telegram data
+- Cleans and labels text for NER
+- Trains and explains a transformer model
+- Ranks vendors by activity, reach, and pricing
+- Outputs a FinTech-ready Vendor Scorecard
 
 ---
